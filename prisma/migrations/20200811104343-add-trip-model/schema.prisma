@@ -1,7 +1,7 @@
 // 1
 datasource db {
   provider = "sqlite" 
-  url      = "file:./dev.db"
+  url = "***"
 }
 
 // 2
@@ -28,7 +28,6 @@ model User {
   links    Link[]
   votes    Vote[]
   trips    Trip[]
-  profile  String
 }
 
 model Vote {

@@ -10,7 +10,7 @@ type Feed {
 
 type Mutation {
   post(url: String!, description: String!): Link!
-  signup(email: String!, password: String!, name: String!): AuthPayload
+  signup(email: String!, password: String!, name: String!, profile: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
   vote(linkId: ID!): Vote
 }
@@ -32,6 +32,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  profile: String
   links: [Link!]!
 }
 
