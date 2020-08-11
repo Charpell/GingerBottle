@@ -1,7 +1,7 @@
 // 1
 datasource db {
   provider = "postgresql" 
-  url      = "postgres://lxzaqggodzvohe:550e58b1ec8de10a3bfe24a01fc129b62b57f75c61da3210fde6a334bdb86c9e@ec2-184-73-249-9.compute-1.amazonaws.com:5432/d9fsnanvdf8atv"
+  url = "***"
 }
 
 // 2
