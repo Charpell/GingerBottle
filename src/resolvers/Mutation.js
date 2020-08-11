@@ -87,11 +87,32 @@ const { APP_SECRET, getUserId } = require('../utils')
     return newVote
   }
 
+  function trip(parent, args, context, info) {
+    const userId = getUserId(context)
+  
+    const newTrip = context.prisma.trip.create({
+      data: {
+        distance: args.distance,
+        destinationLatitude: args.destinationLatitude,
+        destinationLongitude: args.destinationLongitude,
+        startAddress: args.startAddress,
+        startLatitude: args.startLatitude,
+        startLongitude: args.startLongitude,
+        estimatedTime: args.estimatedTime,
+        destinationAddress: args.destinationAddress,
+        postedBy: { connect: { id: userId } },
+      }
+    })
+  
+    return newTrip
+  }
+
 
   module.exports = {
     signup,
     login,
     post,
-    vote
+    vote,
+    trip
   }
   

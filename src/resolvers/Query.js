@@ -22,8 +22,26 @@ async function feed(parent, args, context, info) {
     count,
   }
 }
+
+async function trip(parent, args, context, info) {
+
+  const trips = await context.prisma.trip.findMany({
+    where: {},
+    skip: args.skip,
+    take: args.take,
+    orderBy: args.orderBy,
+  })
+
+  const count = await context.prisma.trip.count({ where: {} })
+
+  return {
+    trips,
+    count,
+  }
+}
   
   module.exports = {
     feed,
+    trip
   }
   
