@@ -27,7 +27,6 @@ model User {
   password String
   links    Link[]
   votes    Vote[]
-  trips    Trip[]
   profile  String
 }
 
@@ -39,19 +38,4 @@ model Vote {
   userId Int
 
   @@unique([linkId, userId])
-}
-
-model Trip {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  postedBy User? @relation(fields: [tripId], references: [id])
-  tripId Int?
-  distance Float 
-  destinationLatitude Float
-  destinationLongitude Float 
-  startAddress String
-  startLatitude Float
-  startLongitude Float
-  estimatedTime String 
-  destinationAddress String
 }
