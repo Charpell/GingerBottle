@@ -4,10 +4,10 @@ const prisma = new PrismaClient()
 
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
-const User = require('./resolvers/User')
-const Link = require('./resolvers/Link')
+const User = require('./resolvers/schema/User')
+const Link = require('./resolvers/schema/Link')
 const Subscription = require('./resolvers/Subscription')
-const Vote = require('./resolvers/Vote')
+const Vote = require('./resolvers/schema/Vote')
 
 const pubsub = new PubSub()
 

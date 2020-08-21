@@ -1,7 +1,7 @@
 type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): Feed!
-  user(filter: String, skip: Int, take: Int): UserFeed
+  getUser(userId: ID!): User
 }
 
 type Feed {
@@ -9,10 +9,6 @@ type Feed {
   count: Int!
 }
 
-type UserFeed {
-  users: [User]
-  count: Int!
-}
 
 
 type Mutation {
@@ -20,6 +16,9 @@ type Mutation {
   signup(email: String!, password: String!, name: String!, profile: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
   vote(linkId: ID!): Vote
+  deletePost(id: ID!): Link!
+  updateUser(email: String): User!
+  deleteUser(id: ID!): User!
 }
 
 type Link {
