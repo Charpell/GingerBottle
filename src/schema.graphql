@@ -1,10 +1,16 @@
 type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): Feed!
+  user(filter: String, skip: Int, take: Int): UserFeed
 }
 
 type Feed {
   links: [Link!]!
+  count: Int!
+}
+
+type UserFeed {
+  users: [User]
   count: Int!
 }
 
