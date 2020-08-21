@@ -1,4 +1,7 @@
 const {getUser} = require('./User')
+const {getCategory} = require('./Category')
+const {getLocation} = require('./Location')
+const {getUserFood} = require('./Food')
 
 
 async function feed(parent, args, context, info) {
@@ -31,6 +34,9 @@ async function feed(parent, args, context, info) {
   
   module.exports = {
     feed,
-    getUser
+    getUser,
+    getCategory,
+    getLocation,
+    getUserFood
   }
   

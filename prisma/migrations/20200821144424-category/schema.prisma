@@ -1,7 +1,7 @@
 // 1
 datasource db {
   provider = "postgresql" 
-  url      = "postgres://lxzaqggodzvohe:550e58b1ec8de10a3bfe24a01fc129b62b57f75c61da3210fde6a334bdb86c9e@ec2-184-73-249-9.compute-1.amazonaws.com:5432/d9fsnanvdf8atv"
+  url = "***"
 }
 
 // 2
@@ -45,10 +45,10 @@ model Food {
   profile String 
   profiles String[]
   price  String 
+  discountprice   String
   category Category[]
   liters Int @default(2)
   order Order[]
-  variant Variant[]
   postedBy    User?     @relation(fields: [postedById], references: [id])
   postedById  Int?
 }
@@ -60,15 +60,6 @@ model Location {
   city String 
   currency String 
   language Language[]
-}
-
-model Variant {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  liters Int 
-  price String
-  food    Food?     @relation(fields: [foodId], references: [id])
-  foodId  Int?
 }
 
 model Category {

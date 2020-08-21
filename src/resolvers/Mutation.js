@@ -1,4 +1,7 @@
 const {login, signup, updateUser, deleteUser} = require('./User')
+const {createFood, updateFood} = require('./Food')
+const {createCategory} = require('./Category')
+const {createLocation} = require('./Location')
 
   function post(parent, args, context, info) {
     const userId = getUserId(context)
@@ -63,6 +66,10 @@ const {login, signup, updateUser, deleteUser} = require('./User')
     vote,
     deletePost,
     updateUser,
-    deleteUser
+    deleteUser,
+    createFood,
+    createCategory,
+    createLocation,
+    updateFood
   }
   

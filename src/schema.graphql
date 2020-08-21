@@ -1,6 +1,9 @@
 type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): Feed!
+  getCategory(filter: String, skip: Int, take: Int, orderBy: CategoryOrderByInput): CategoryFeed!
+  getLocation(filter: String, skip: Int, take: Int, orderBy: LocationOrderByInput): LocationFeed!
+  getUserFood(filter: String, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
   getUser(userId: ID!): User
 }
 
@@ -9,16 +12,35 @@ type Feed {
   count: Int!
 }
 
+type CategoryFeed {
+  categories: [Category]
+  count: Int!
+}
+
+type LocationFeed {
+  locations: [Location]
+  count: Int!
+}
+
+type FoodFeed {
+  food: [Food]
+  count: Int!
+}
+
 
 
 type Mutation {
   post(url: String!, description: String!): Link!
-  signup(email: String!, password: String!, firstname: String!, lastname: String!, profile: String): AuthPayload
+  signup(email: String!, password: String!, firstname: String!, lastname: String!, phone: String!, whatsapp: String, profile: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
   vote(linkId: ID!): Vote
   deletePost(id: ID!): Link!
   updateUser(email: String): User!
   deleteUser(id: ID!): User!
+  createFood(name: String!, description: String!, profile: String!, profiles: [String], price: String, liters: String): Food
+  createCategory(name: String!, description: String!, profile: String!): Category
+  createLocation(country: String!, city: String!, currency: String!): Location
+  updateFood(name: String, description: String, profile: String, profiles: [String], price: String, liters: String): Food
 }
 
 type Link {
@@ -40,7 +62,23 @@ type User {
   lastname: String
   email: String!
   profile: String
-  links: [Link!]!
+  role: Role
+  seller: Boolean
+  links: [Link]
+}
+
+type Category {
+  id: ID!
+  name: String
+  description: String 
+  profile: String
+}
+
+type Location {
+  id: ID! 
+  country: String 
+  city: String 
+  currency: String
 }
 
 type Subscription {
@@ -54,13 +92,42 @@ type Vote {
   user: User!
 }
 
+type Food {
+  id: ID! 
+  name: String 
+  description: String 
+  profile: String 
+  profiles: [String]
+  price: String 
+  liters: Int
+}
+
 input LinkOrderByInput {
   description: Sort
   url: Sort
   createdAt: Sort
 }
 
+input LocationOrderByInput {
+  country: Sort
+  city: Sort
+  currency: Sort
+}
+
+input FoodOrderByInput {
+  name: Sort 
+}
+
+input CategoryOrderByInput {
+  name: Sort
+}
+
 enum Sort {
   asc
   desc
+}
+
+enum Role {
+  USER
+  ADMIN
 }
