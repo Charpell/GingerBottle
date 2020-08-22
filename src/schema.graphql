@@ -45,6 +45,11 @@ type Mutation {
   createVariant(name: String!, description: String!, profile: String!,  price: String, liters: Int, foodId: ID!): Variant
   updateVariant(name: String, description: String, profile: String,  price: String, liters: Int, variantId: ID!): Variant
   deleteVariant(id: ID!): Variant!
+  createOrder(delivery: String, time: Int, variant: ID!): Order
+  orderStatus(status: String!, orderId: ID!): Order 
+  payOrder(orderId: ID!): Order 
+  completeOrder(orderId: ID!): Order 
+  cancelOrder(orderId: ID!): Order
 }
 
 type Link {
@@ -77,6 +82,15 @@ type Category {
   description: String 
   profile: String
   food: [Food]
+}
+
+type Order {
+  id: ID! 
+  delivery: String 
+  time: Int 
+  status: Status
+  postedBy: User 
+  variant: Variant
 }
 
 type Location {
@@ -147,4 +161,13 @@ enum Sort {
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  UNPAID 
+  PENDING 
+  PROGRESS 
+  COMPLETED 
+  DELIVERED 
+  CANCELLED
 }

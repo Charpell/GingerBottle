@@ -29,6 +29,7 @@ model User {
   links    Link[]
   votes    Vote[]
   food     Food[]
+  wallet  Wallet[]
   profile  String
   phone    String?
   whatsapp String?
@@ -85,6 +86,31 @@ model Variant {
   order Order [] 
 }
 
+model Wallet {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  accountNumber String @unique 
+  balance Float @default(0)
+  postedBy User? @relation(fields: [postedById], references: [id])
+  postedById Int?
+  currency Currency
+  name String 
+  walletTransaction WalletTransaction []
+  color String
+}
+
+model WalletTransaction {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  operation Operation
+  amount Int 
+  balance Int 
+  accountNumber String 
+  name String
+  wallet Wallet? @relation(fields: [walletId], references: [id])
+  walletId Int?
+}
+
 model Category {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
@@ -139,4 +165,17 @@ enum Language {
   ENGLISH 
   FRENCH 
   GERMANY
+}
+
+enum Currency {
+  NGN 
+  GHC
+  USD 
+  GBP
+}
+
+enum Operation {
+  DEPOSIT 
+  WITHDRAWAL
+  TRANSFER 
 }

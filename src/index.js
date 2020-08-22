@@ -10,6 +10,7 @@ const Subscription = require('./resolvers/Subscription')
 const Vote = require('./resolvers/schema/Vote')
 const Food = require('./resolvers/schema/Food')
 const Category = require('./resolvers/schema/Category')
+const Order = require('./resolvers/schema/Order')
 
 const pubsub = new PubSub()
 
@@ -29,7 +30,8 @@ const resolvers = {
     Link,
     Vote,
     Food,
-    Category
+    Category,
+    Order
   }
 
 // 3
