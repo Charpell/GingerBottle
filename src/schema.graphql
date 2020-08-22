@@ -3,7 +3,8 @@ type Query {
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): Feed!
   getCategory(filter: String, skip: Int, take: Int, orderBy: CategoryOrderByInput): CategoryFeed!
   getLocation(filter: String, skip: Int, take: Int, orderBy: LocationOrderByInput): LocationFeed!
-  getUserFood(filter: String, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
+  getUserFood(userId: ID!, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
+  getFood(filter: String, location: ID!, category: ID, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
   getUser(userId: ID!): User
 }
 
@@ -37,10 +38,13 @@ type Mutation {
   deletePost(id: ID!): Link!
   updateUser(email: String): User!
   deleteUser(id: ID!): User!
-  createFood(name: String!, description: String!, profile: String!, profiles: [String], price: String, liters: String): Food
+  createFood(name: String!, description: String!, profile: String!,  price: String, liters: Int, category: ID!, location: ID!): Food
   createCategory(name: String!, description: String!, profile: String!): Category
   createLocation(country: String!, city: String!, currency: String!): Location
-  updateFood(name: String, description: String, profile: String, profiles: [String], price: String, liters: String): Food
+  updateFood(name: String, description: String, profile: String, price: String, liters: Int, foodId: ID!): Food
+  createVariant(name: String!, description: String!, profile: String!,  price: String, liters: Int, foodId: ID!): Variant
+  updateVariant(name: String, description: String, profile: String,  price: String, liters: Int, variantId: ID!): Variant
+  deleteVariant(id: ID!): Variant!
 }
 
 type Link {
@@ -72,6 +76,7 @@ type Category {
   name: String
   description: String 
   profile: String
+  food: [Food]
 }
 
 type Location {
@@ -97,7 +102,19 @@ type Food {
   name: String 
   description: String 
   profile: String 
-  profiles: [String]
+  price: String 
+  liters: Int
+  category: Category 
+  location: Location 
+  postedBy: User
+  variant: [Variant]
+}
+
+type Variant {
+  id: ID! 
+  name: String 
+  description: String 
+  profile: String 
   price: String 
   liters: Int
 }

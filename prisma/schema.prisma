@@ -34,7 +34,8 @@ model User {
   whatsapp String?
   role  Role  @default(USER)
   seller Boolean @default(false)
-  location Location[]
+  location Location? @relation(fields: [locationId], references: [id])
+  locationId Int?
 }
 
 model Food {
@@ -43,57 +44,66 @@ model Food {
   description String
   name String
   profile String 
-  profiles String[]
   price  String 
-  category Category[]
+  category Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+  location Location? @relation(fields: [locationId], references: [id])
+  locationId Int?
   liters Int @default(2)
-  order Order[]
   variant Variant[]
+  delivery Boolean @default(true)
+  video String?
   postedBy    User?     @relation(fields: [postedById], references: [id])
   postedById  Int?
+  extendProfile Json?
 }
 
 model Location {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   country String 
-  city String 
+  city String @unique
   currency String 
   language Language[]
+  food Food []
+  user User []
 }
 
 model Variant {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
+  name String
+  description String 
+  profile String
   liters Int 
   price String
+  video String?
   food    Food?     @relation(fields: [foodId], references: [id])
   foodId  Int?
+  postedBy User? @relation(fields: [postedById], references: [id])
+  postedById Int?
+  order Order [] 
 }
 
 model Category {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   description String
-  name String
+  name String @unique
   profile String 
-  food    Food?     @relation(fields: [foodId], references: [id])
-  foodId  Int?
+  food Food []
 }
 
 model Order {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  description String?
-  protein Protein
-  liters Int
-  price String
+  delivery String?
   time Int?
   status Status
   postedBy    User?     @relation(fields: [postedById], references: [id])
   postedById  Int?
-  food    Food?     @relation(fields: [foodId], references: [id])
-  foodId  Int?
+  variant Variant? @relation(fields: [variantId], references: [id])
+  variantId Int?
 }
 
 model Vote {
@@ -117,6 +127,7 @@ enum Protein {
 }
 
 enum Status {
+  UNPAID
   PENDING 
   PROGRESS 
   COMPLETED

@@ -2,6 +2,9 @@ const {login, signup, updateUser, deleteUser} = require('./User')
 const {createFood, updateFood} = require('./Food')
 const {createCategory} = require('./Category')
 const {createLocation} = require('./Location')
+const {createVariant, updateVariant, deleteVariant} = require('./Variant')
+
+const { APP_SECRET, getUserId } = require('../utils')
 
   function post(parent, args, context, info) {
     const userId = getUserId(context)
@@ -70,6 +73,9 @@ const {createLocation} = require('./Location')
     createFood,
     createCategory,
     createLocation,
-    updateFood
+    updateFood,
+    createVariant,
+    updateVariant,
+    deleteVariant
   }
   

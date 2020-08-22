@@ -8,6 +8,8 @@ const User = require('./resolvers/schema/User')
 const Link = require('./resolvers/schema/Link')
 const Subscription = require('./resolvers/Subscription')
 const Vote = require('./resolvers/schema/Vote')
+const Food = require('./resolvers/schema/Food')
+const Category = require('./resolvers/schema/Category')
 
 const pubsub = new PubSub()
 
@@ -25,7 +27,9 @@ const resolvers = {
     Subscription,
     User,
     Link,
-    Vote
+    Vote,
+    Food,
+    Category
   }
 
 // 3

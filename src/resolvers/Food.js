@@ -4,13 +4,13 @@ async function createFood(parent, args, context, info) {
     const userId = getUserId(context)
     // if (role !== 91) throw new Error("Permission denied")
     try {
-        const food = await context.prisma.user.create({ data: { 
+        const food = await context.prisma.food.create({ data: { 
             name: args.name,
             description: args.description,
             profile: args.profile,
-            profiles: args.profiles,
             price: args.price,
-            category: { connect: { id: args.category }},
+            category: { connect: { id: Number(args.category) }},
+            location: { connect: { id: Number(args.location )}},
             liters: args.liters,
             postedBy: { connect: { id: userId }}
          } })
@@ -21,12 +21,34 @@ async function createFood(parent, args, context, info) {
   }
 
   async function getUserFood(parent, args, context, info) {
-    const where = args.filter
+    const where = { postedBy: { id: Number(args.userId) }}
+  
+    const food = await context.prisma.food.findMany({
+      where,
+      skip: args.skip,
+      take: args.take,
+      orderBy: args.orderBy,
+    })
+  
+    const count = await context.prisma.food.count({ where })
+  
+    return {
+      food,
+      count,
+    }
+  }
+
+  async function getFood(parent, args, context, info) {
+    const where = args
       ? {
-        OR: [
-          { postedBy: { id: args.userId }}
-        ],
-      }
+          OR: [
+            { name: { contains: args.filter } },
+            { category:  { id: Number(args.category) }}
+          ],
+          AND: [
+            { location:  { id: Number(args.location) }} 
+          ]
+        }
       : {}
   
     const food = await context.prisma.food.findMany({
@@ -46,9 +68,9 @@ async function createFood(parent, args, context, info) {
 
   async function updateFood(parent, args, context, info) {
     const userId = getUserId(context)
-    const food = await context.prisma.user.update({
+    const food = await context.prisma.food.update({
       where: { id: Number(args.foodId) },
-      data: { description: args.description, profile: args.profile, profiles: args.profiles, price: args.price, liters: args.liters }
+      data: { name: args.food, description: args.description, profile: args.profile, price: args.price, liters: args.liters }
     })
   
     return food
@@ -58,5 +80,6 @@ async function createFood(parent, args, context, info) {
 module.exports = {
     createFood,
     getUserFood,
-    updateFood
+    updateFood,
+    getFood
 }
