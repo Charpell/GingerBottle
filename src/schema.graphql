@@ -6,11 +6,17 @@ type Query {
   getUserFood(userId: ID!, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
   getFood(filter: String, location: ID!, category: ID, skip: Int, take: Int, orderBy: FoodOrderByInput): FoodFeed!
   getUser(userId: ID!): User
+  getUserWallet: WalletFeed
 }
 
 type Feed {
   links: [Link!]!
   count: Int!
+}
+
+type WalletFeed {
+  count: Int! 
+  wallet: [Wallet]
 }
 
 type CategoryFeed {
@@ -50,6 +56,13 @@ type Mutation {
   payOrder(orderId: ID!): Order 
   completeOrder(orderId: ID!): Order 
   cancelOrder(orderId: ID!): Order
+  createWallet(currency: String!, color: String!, name: String!): WalletResponse
+  updateWallet(color: String, name: String, walletId: ID!): WalletResponse
+  walletDeposit(accountId: String!, currency: String!, amount: Int, reference: String!): TransactionResponse
+  walletWithdrawal(accountId: String!, currency: String!, amount: Int, reference: String!): TransactionResponse
+  walletTransfer(accountId: String!, destionationAccountId: String!, amount: Int, reference: String!): TransactionResponse
+  updateRefferal(userId: String!): UserResponse
+  updatePassword(old: String!, new: String!): UserResponse
 }
 
 type Link {
@@ -76,6 +89,25 @@ type User {
   links: [Link]
 }
 
+type UserResponse {
+  error: String 
+  user: User
+}
+
+type TransactionResponse {
+  error: String 
+  transaction: Transaction
+}
+
+type Transaction {
+  id: ID! 
+  operation: Operation
+  amount: Int 
+  balance: Int 
+  accountNumber: String 
+  name: String
+}
+
 type Category {
   id: ID!
   name: String
@@ -91,6 +123,19 @@ type Order {
   status: Status
   postedBy: User 
   variant: Variant
+}
+
+type Wallet {
+  id: ID! 
+  color: String 
+  balance: Float 
+  currency: String 
+  name: String
+}
+
+type WalletResponse {
+  error: String 
+  wallet: Wallet
 }
 
 type Location {
@@ -170,4 +215,10 @@ enum Status {
   COMPLETED 
   DELIVERED 
   CANCELLED
+}
+
+enum Operation {
+  DEPOSIT 
+  WITHDRWAL 
+  TRANSFER
 }

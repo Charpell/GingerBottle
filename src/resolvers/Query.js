@@ -2,6 +2,7 @@ const {getUser} = require('./User')
 const {getCategory} = require('./Category')
 const {getLocation} = require('./Location')
 const {getUserFood, getFood} = require('./Food')
+const {getUserWallet} = require('./Wallet')
 
 
 async function feed(parent, args, context, info) {
@@ -38,6 +39,7 @@ async function feed(parent, args, context, info) {
     getCategory,
     getLocation,
     getUserFood,
-    getFood
+    getFood,
+    getUserWallet
   }
   

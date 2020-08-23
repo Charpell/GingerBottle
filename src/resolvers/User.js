@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserId } = require('../utils')
+let yup = require('yup')
 
   async function signup(parent, args, context, info) {
     // 1
@@ -68,10 +69,90 @@ const { APP_SECRET, getUserId } = require('../utils')
     return user
   }
 
+  const updateRefferal = {
+    validationSchema: yup.object().shape({
+      userId: yup
+        .string().required().trim()
+    }),
+    resolve: async (parent, args, context, info)=> {
+      const userId = getUserId(context)
+      try {
+        const result = await Promise.all([
+          context.prisma.updateUser({
+            data: {
+              referral: args.userId,
+              hasReferral: true
+            },
+            where: {
+              id: Number(userId)
+            }
+          }),
+          context.prisma.updateUser({
+            data: {
+              referee: { connect: { id: Number(userId) }}
+            },
+            where: {
+              id: args.userId
+            }
+          })
+        ])
+        const user = result[0]
+        return {user}
+      } catch (error) {
+        throw new Error(error)
+      }
+    
+    },
+  }
+
+  const updatePassword = {
+    validationSchema: yup.object().shape({
+      old: yup 
+        .string().trim().min(1).max(30).required(),
+      new: yup 
+        .string().trim().min(1).max(30).required(),
+    }),
+    resolve: async (parent, args, context, info)=> {
+      const userId = getUserId(context)
+      try {
+        const user = await context.prisma.user({ id: userId })
+        if (!user) {
+          throw new Error('No such user found')
+        }
+  
+        const valid = await bcrypt.compare(args.old, user.password)
+        if (!valid) {
+          throw new Error('Invalid password')
+        }
+  
+        const password = await bcrypt.hash(args.new, 10)
+  
+        await context.prisma.updateUser({
+          data: {
+            password: password
+          },
+          where: {
+            id: userId
+          }
+        })
+  
+        
+        return {
+          user
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    
+    },
+  }
+
   module.exports = {
       signup,
       login,
       getUser,
       updateUser,
-      deleteUser
+      deleteUser,
+      updateRefferal,
+      updatePassword
   }

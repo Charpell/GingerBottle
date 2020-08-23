@@ -1,9 +1,10 @@
-const {login, signup, updateUser, deleteUser} = require('./User')
+const {login, signup, updateUser, deleteUser, updateRefferal, updatePassword} = require('./User')
 const {createFood, updateFood} = require('./Food')
 const {createCategory} = require('./Category')
 const {createLocation} = require('./Location')
 const {createVariant, updateVariant, deleteVariant} = require('./Variant')
 const {createOrder, payOrder, orderStatus, completeOrder, cancelOrder} = require('./Order')
+const {createWallet, updateWallet, walletDeposit, walletWithdrawal, walletTransfer} = require('./Wallet')
 
 const { APP_SECRET, getUserId } = require('../utils')
 
@@ -82,6 +83,13 @@ const { APP_SECRET, getUserId } = require('../utils')
     orderStatus,
     payOrder,
     completeOrder,
-    cancelOrder
+    cancelOrder,
+    createWallet,
+    updateWallet,
+    walletDeposit,
+    walletWithdrawal,
+    walletTransfer,
+    updateRefferal,
+    updatePassword
   }
   

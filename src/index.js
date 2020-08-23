@@ -1,6 +1,7 @@
 const { GraphQLServer, PubSub } = require('graphql-yoga')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const yup = require('yup')
 
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
@@ -20,6 +21,29 @@ type Query {
   info: String!
 }
 `
+
+const yupValidation = {
+  async Mutation(resolve, parent, args, context, info) {
+    const mutationField = info.schema.getMutationType().getFields()[info.fieldName];
+    const mutationValidationSchema = mutationField.validationSchema;
+    
+    if (mutationValidationSchema) {
+      try {
+        const values = await mutationValidationSchema.validate(args);
+      } catch (error) {
+        if (error instanceof yup.ValidationError) {
+          return {
+            error: error.message,
+          };
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    return resolve(parent, args, context, info);
+  }
+}
 
 // 2
 const resolvers = {
@@ -44,6 +68,7 @@ const server = new GraphQLServer({
           prisma,
           pubsub
         }
-  }
+  },
+  middlewares: [yupValidation]
 })
 server.start(() => console.log(`Server is running on http://localhost:4000`))
